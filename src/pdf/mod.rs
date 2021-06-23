@@ -103,9 +103,9 @@ impl Pdf {
         let offset_y = DOC_HEIGHT - (start + Mm(10.));
 
         self.layer.begin_text_section();
-        self.layer.set_font(&self.font_bold, 20);
+        self.layer.set_font(&self.font_bold, 20.0);
         self.layer.set_text_cursor(offset_x, offset_y);
-        self.layer.set_line_height(18);
+        self.layer.set_line_height(18.0);
         self.resume
             .basics
             .name
@@ -116,7 +116,7 @@ impl Pdf {
                 self.layer.add_line_break();
             });
 
-        self.layer.set_font(&self.font_regular, 10);
+        self.layer.set_font(&self.font_regular, 10.0);
         self.layer
             .write_text(&self.resume.basics.label, &self.font_regular);
         self.layer.end_text_section();
@@ -128,10 +128,10 @@ impl Pdf {
         let offset_y = DOC_HEIGHT - (start + Mm(35.));
 
         self.layer.begin_text_section();
-        self.layer.set_line_height(18);
+        self.layer.set_line_height(18.0);
         self.write_underlined_text(INFO, 12, offset_x, offset_y);
         self.layer.add_line_break();
-        self.layer.set_line_height(16);
+        self.layer.set_line_height(16.0);
 
         self.layer.add_line_break();
 
@@ -142,7 +142,7 @@ impl Pdf {
             self.secondary_color.clone(),
         )?;
 
-        self.layer.set_font(&self.font_regular, 9);
+        self.layer.set_font(&self.font_regular, 9.0);
         self.layer.write_text(
             format!("   {}", &self.resume.basics.email),
             &self.font_regular,
@@ -156,7 +156,7 @@ impl Pdf {
                 12,
                 self.secondary_color.clone(),
             )?;
-            self.layer.set_font(&self.font_regular, 9);
+            self.layer.set_font(&self.font_regular, 9.0);
             self.layer
                 .write_text(format!("   {}", phone), &self.font_regular);
         }
@@ -173,7 +173,7 @@ impl Pdf {
                 12,
                 self.secondary_color.clone(),
             )?;
-            self.layer.set_font(&self.font_regular, 9);
+            self.layer.set_font(&self.font_regular, 9.0);
             let text = match country_code.as_ref() {
                 None => String::new(),
                 Some(country_code) => format!(", {}", country_code),
@@ -196,7 +196,7 @@ impl Pdf {
                 .signed_duration_since(*birthday)
                 .num_weeks()
                 / 52;
-            self.layer.set_font(&self.font_regular, 9);
+            self.layer.set_font(&self.font_regular, 9.0);
             self.layer.write_text(
                 format!(
                     "    {} ({}yo)",
@@ -215,17 +215,17 @@ impl Pdf {
         self.layer.set_fill_color(self.secondary_color.clone());
         let offset_x = PROFILE_X_OFFSET;
         let offset_y = DOC_HEIGHT - (start + Mm(25.) + Mm(48.));
-        self.layer.set_line_height(18);
+        self.layer.set_line_height(18.0);
         self.write_underlined_text(SOCIALS, 12, offset_x, offset_y);
         self.layer.add_line_break();
-        self.layer.set_line_height(16);
+        self.layer.set_line_height(16.0);
 
         self.resume.basics.profiles.iter().for_each(|profile| {
             self.layer.add_line_break();
             let network = profile.network.to_lowercase();
             self.write_social_icon(&network, 12).unwrap();
             self.layer.set_fill_color(self.secondary_color.clone());
-            self.layer.set_font(&self.font_regular, 10);
+            self.layer.set_font(&self.font_regular, 10.0);
             self.layer
                 .write_text(format!("   {}", &profile.username), &self.font_regular);
         });
@@ -238,13 +238,13 @@ impl Pdf {
         self.layer.set_fill_color(self.secondary_color.clone());
         let offset_x = PROFILE_X_OFFSET;
         let offset_y = DOC_HEIGHT - (start + Mm(25.) + Mm(85.));
-        self.layer.set_line_height(18);
+        self.layer.set_line_height(18.0);
 
         self.write_underlined_text(LANGUAGES, 12, offset_x, offset_y);
 
         self.layer.add_line_break();
 
-        self.layer.set_line_height(16);
+        self.layer.set_line_height(16.0);
         let width = self
             .resume
             .languages
@@ -259,13 +259,13 @@ impl Pdf {
             .iter()
             .for_each(|Language { language, fluency }| {
                 self.layer.add_line_break();
-                self.layer.set_font(&self.font_bold, 10);
+                self.layer.set_font(&self.font_bold, 10.0);
                 self.layer.write_text(
                     format!("- {:<width$}", language, width = width),
                     &self.font_bold,
                 );
                 if let Some(fluency) = fluency {
-                    self.layer.set_font(&self.font_thin, 10);
+                    self.layer.set_font(&self.font_thin, 10.0);
                     self.layer.write_text(fluency, &self.font_thin);
                 }
             });
@@ -277,22 +277,22 @@ impl Pdf {
         self.layer.set_fill_color(self.secondary_color.clone());
         let offset_x = PROFILE_X_OFFSET;
         let offset_y = DOC_HEIGHT - (start + Mm(25.) + Mm(85.) + Mm(40.));
-        self.layer.set_line_height(18);
+        self.layer.set_line_height(18.0);
 
         self.write_underlined_text(SKILLS, 12, offset_x, offset_y);
 
         self.layer.add_line_break();
-        self.layer.set_line_height(14);
+        self.layer.set_line_height(14.0);
         self.layer.add_line_break();
         self.resume
             .skills
             .iter()
             .for_each(|Skill { name, keywords, .. }| {
-                self.layer.set_font(&self.font_bold, 10);
+                self.layer.set_font(&self.font_bold, 10.0);
                 self.layer
                     .write_text(format!("- {}", name), &self.font_bold);
                 self.layer.add_line_break();
-                self.layer.set_font(&self.font_thin, 10);
+                self.layer.set_font(&self.font_thin, 10.0);
                 self.write_bounded(&keywords.join("  -  "), 36);
             });
         self.layer.end_text_section();
@@ -423,8 +423,8 @@ impl Pdf {
         }
         self.layer.begin_text_section();
 
-        self.layer.set_font(&self.font_bold, 12);
-        self.layer.set_line_height(12);
+        self.layer.set_font(&self.font_bold, 12.0);
+        self.layer.set_line_height(12.0);
 
         self.layer
             .set_text_cursor(LEFT_COLUMN_SIZE + Mm(5.), (pos_y - Pt(20.)).into());
@@ -439,15 +439,15 @@ impl Pdf {
             let institution = split_iter.next().unwrap();
             let location = split_iter.collect::<Vec<_>>().join(",");
             self.write_bounded(institution, 30);
-            self.layer.set_font(&self.font_regular, 9);
+            self.layer.set_font(&self.font_regular, 9.0);
             if !location.is_empty() {
                 self.write_bounded(&location.trim(), 30);
             }
         };
 
-        self.layer.set_font(&self.font_regular, 9);
+        self.layer.set_font(&self.font_regular, 9.0);
         self.write_bounded(&event.label, 30);
-        self.layer.set_font(&self.font_thin, 9);
+        self.layer.set_font(&self.font_thin, 9.0);
         self.layer.write_text(
             format!("{} - {}", event.start_date.format(DATE_FORMAT), end_date),
             &self.font_regular,
@@ -461,14 +461,14 @@ impl Pdf {
 
         self.layer
             .set_text_cursor(offset + Mm(7.), (pos_y - Pt(20.)).into());
-        self.layer.set_font(&self.font_regular, 9);
+        self.layer.set_font(&self.font_regular, 9.0);
         if let Some(summary) = &event.summary {
             self.write_bounded(&summary, 36);
         }
 
         if !event.highlights.is_empty() {
             self.layer.add_line_break();
-            self.layer.set_font(&self.font_bold, 9);
+            self.layer.set_font(&self.font_bold, 9.0);
             self.write_bounded(&event.highlights.join("  -  "), 35)
         }
         self.layer.end_text_section();

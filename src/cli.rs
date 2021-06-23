@@ -18,7 +18,7 @@ pub struct CLI {
 }
 
 impl CLI {
-    pub fn log_level(&self) -> Option<log::Level> {
-        self.verbose.log_level()
+    pub fn log_level(&self) -> Option<log::LevelFilter> {
+        self.verbose.log_level().map(|l| l.to_level_filter())
     }
 }

@@ -12,8 +12,8 @@ clap-verbosity-flag = '0.3'
 printpdf = '0.3'
 toml = '0.5'
 lazy_static = '1.4'
-qrcode-generator = '1.0'
-textwrap = '0.11'
+qrcode-generator = '4'
+textwrap = '0.14'
 relative-path = '1'
 
 [dependencies.chrono]
@@ -25,7 +25,7 @@ version = '1'
 features = ['derive']
 
 [dependencies.simple_logger]
-version = '1.6'
+version = '1.11'
 default-features = false
 features = ['colored']
 [profile.release]

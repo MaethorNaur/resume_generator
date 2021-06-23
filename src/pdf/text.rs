@@ -27,7 +27,7 @@ impl Pdf {
         offset_x: Mm,
         offset_y: Mm,
     ) {
-        self.layer.set_font(&self.font_bold, font_size);
+        self.layer.set_font(&self.font_bold, font_size as f64);
         self.layer.set_text_cursor(offset_x, offset_y);
         self.layer.write_text(text, &self.font_bold);
         let offset_y_pt: Pt = offset_y.into();

@@ -51,7 +51,7 @@ impl FontAwesome {
         let icon = FONTS.get(name).ok_or(UnkownFontError::new(name))?;
         let font = &self.regular;
         current_layer.set_fill_color(color);
-        current_layer.set_font(&font, font_size);
+        current_layer.set_font(&font, font_size as f64);
         current_layer.write_text(*icon, &font);
         Ok(())
     }

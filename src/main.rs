@@ -14,6 +14,7 @@ mod resume;
 use cli::CLI;
 use pdf::Pdf;
 use resume::Resume;
+use simple_logger::SimpleLogger;
 use std::borrow::Cow;
 use std::env;
 use std::error::Error;
@@ -25,7 +26,7 @@ use structopt::StructOpt;
 fn main() {
     let opt = CLI::from_args();
     if let Some(level) = opt.log_level() {
-        simple_logger::init_with_level(level).unwrap();
+        SimpleLogger::new().with_level(level).init().unwrap();
     }
     let filename = opt.filename;
     let output = opt.output;

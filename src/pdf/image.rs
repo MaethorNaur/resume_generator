@@ -7,12 +7,8 @@ pub fn from_path(filename: &str) -> Result<Image, image::ImageError> {
 }
 
 pub fn qrcode(url: &str, size: usize, color: Rgb) -> Result<Image, image::ImageError> {
-    let image = qrcode_generator::to_image_buffer_by_segments(
-        &qrcode_generator::optimize_url_segments(url),
-        QrCodeEcc::High,
-        size,
-    )?;
-    let mut buffer = image::DynamicImage::ImageLuma8(image).to_rgb();
+    let image = qrcode_generator::to_image_buffer_from_str(url, QrCodeEcc::High, size).unwrap();
+    let mut buffer = image::DynamicImage::ImageLuma8(image).to_rgb8();
     let new_color = [
         (color.r * 255.0) as u8,
         (color.g * 255.0) as u8,
