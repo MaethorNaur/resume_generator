@@ -364,12 +364,14 @@ impl Pdf {
 
                     image.add_to_layer(
                         self.layer.clone(),
-                        Some(Mm(0.)),
-                        Some(DOC_HEIGHT - PROFILE_Y_OFFSET),
-                        None,
-                        Some(scale_x),
-                        Some(scale_y),
-                        Some(DPI),
+                        ImageTransform {
+                            translate_x: Some(Mm(0.)),
+                            translate_y: Some(DOC_HEIGHT - PROFILE_Y_OFFSET),
+                            rotate: None,
+                            scale_x: Some(scale_x),
+                            scale_y: Some(scale_y),
+                            dpi: Some(DPI),
+                        },
                     );
                     RIGHT_COLUMN_HEIGHT
                 }
@@ -477,8 +479,18 @@ impl Pdf {
     fn social_qr_code(&self) -> Result<(), Box<dyn Error>> {
         if let Some(url) = &self.resume.basics.website {
             debug!("Generating QRCode for: {:?}", url);
-            let qrcode = image::qrcode(&url, 150, image::to_rgb(self.primary_color.clone()))?;
-            qrcode.add_to_layer(self.layer.clone(), None, None, None, None, None, Some(DPI));
+            let qrcode = image::qrcode(&url, 220, image::to_rgb(self.primary_color.clone()))?;
+            qrcode.add_to_layer(
+                self.layer.clone(),
+                ImageTransform {
+                    translate_x: None,
+                    translate_y: None,
+                    rotate: None,
+                    scale_x: None,
+                    scale_y: None,
+                    dpi: Some(DPI),
+                },
+            );
         }
         Ok(())
     }

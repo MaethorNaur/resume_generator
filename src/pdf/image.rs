@@ -1,14 +1,14 @@
 use printpdf::*;
 use qrcode_generator::QrCodeEcc;
 
-pub fn from_path(filename: &str) -> Result<Image, image::ImageError> {
-    let dyn_image = image::open(filename)?;
+pub fn from_path(filename: &str) -> Result<Image, image_crate::error::ImageError> {
+    let dyn_image = image_crate::open(filename)?;
     Ok(Image::from_dynamic_image(&dyn_image))
 }
 
-pub fn qrcode(url: &str, size: usize, color: Rgb) -> Result<Image, image::ImageError> {
+pub fn qrcode(url: &str, size: usize, color: Rgb) -> Result<Image, image_crate::error::ImageError> {
     let image = qrcode_generator::to_image_buffer_from_str(url, QrCodeEcc::High, size).unwrap();
-    let mut buffer = image::DynamicImage::ImageLuma8(image).to_rgb8();
+    let mut buffer = image_crate::DynamicImage::ImageLuma8(image).to_rgb8();
     let new_color = [
         (color.r * 255.0) as u8,
         (color.g * 255.0) as u8,
@@ -19,7 +19,7 @@ pub fn qrcode(url: &str, size: usize, color: Rgb) -> Result<Image, image::ImageE
             (*pixel).0 = new_color;
         }
     }
-    let dyn_image = image::DynamicImage::ImageRgb8(buffer);
+    let dyn_image = image_crate::DynamicImage::ImageRgb8(buffer);
     Ok(Image::from_dynamic_image(&dyn_image))
 }
 

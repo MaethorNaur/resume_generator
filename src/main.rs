@@ -18,7 +18,7 @@ use simple_logger::SimpleLogger;
 use std::borrow::Cow;
 use std::env;
 use std::error::Error;
-use std::fs::{remove_file, rename};
+use std::fs::{canonicalize, remove_file, rename};
 use std::path::{Path, PathBuf};
 use std::process::Command;
 use structopt::StructOpt;
@@ -104,9 +104,10 @@ fn optimize_pdf(filename: &PathBuf, ghostscript: Option<PathBuf>) -> Result<(), 
             Ok(())
         }
         Some(path) => {
+            let canonicalize_filename = canonicalize(filename).unwrap();
             debug!("Ghostscript found, {:?}", path);
             let mut temp_file = env::temp_dir();
-            temp_file.push(filename.file_name().unwrap());
+            temp_file.push(canonicalize_filename.file_name().unwrap());
             let temp_file_as_string = temp_file.to_str().unwrap();
             rename(filename, &temp_file_as_string)?;
             debug!(
@@ -114,12 +115,16 @@ fn optimize_pdf(filename: &PathBuf, ghostscript: Option<PathBuf>) -> Result<(), 
                 &temp_file_as_string
             );
             let output = Command::new(path)
+                .current_dir(env::current_dir().unwrap())
                 .arg("-dBATCH")
                 .arg("-dNOPAUSE")
                 .arg("-sDEVICE=pdfwrite")
                 .arg("-dCompatibilityLevel=1.3")
                 .arg("-dEncodeColorImages=true")
-                .arg(format!("-sOutputFile={:?}", filename.to_str().unwrap()))
+                .arg(format!(
+                    "-sOutputFile={}",
+                    canonicalize_filename.to_str().unwrap()
+                ))
                 .arg(&temp_file_as_string)
                 .output()?;
             debug!("Ghostscript {}", output.status);
