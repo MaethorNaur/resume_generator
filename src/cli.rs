@@ -3,7 +3,7 @@ use structopt::StructOpt;
 
 #[derive(StructOpt, Debug)]
 #[structopt(about = "Resume generator")]
-pub struct CLI {
+pub struct Cli {
     #[structopt(parse(from_os_str))]
     /// Resume to generate, (Json or Toml)
     pub filename: PathBuf,
@@ -17,7 +17,7 @@ pub struct CLI {
     verbose: clap_verbosity_flag::Verbosity,
 }
 
-impl CLI {
+impl Cli {
     pub fn log_level(&self) -> Option<log::LevelFilter> {
         self.verbose.log_level().map(|l| l.to_level_filter())
     }

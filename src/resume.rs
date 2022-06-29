@@ -190,7 +190,7 @@ impl Resume {
         };
         if let Some(picture) = &mut resume.basics.picture {
             *picture = RelativePathBuf::from_path(&path.parent().unwrap())?
-                .join(picture.to_string())
+                .join(&picture)
                 .normalize()
                 .as_str()
                 .to_string();

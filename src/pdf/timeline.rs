@@ -35,7 +35,7 @@ impl Timeline {
     }
 
     pub fn events(&self) -> Vec<Event> {
-        let mut events: Vec<Event> = self.events.iter().cloned().collect();
+        let mut events: Vec<Event> = self.events.to_vec();
         events.sort_by(|a, b| match (a.end_date, b.end_date) {
             (None, None) => b.start_date.partial_cmp(&a.start_date).unwrap(),
             (None, _) => Ordering::Less,
@@ -55,7 +55,7 @@ impl From<Work> for Event {
             institution: work.company,
             label: work.position,
             summary: Some(work.summary),
-            highlights: work.highlights.clone(),
+            highlights: work.highlights,
         }
     }
 }
@@ -69,7 +69,7 @@ impl From<Education> for Event {
             institution: education.institution,
             label: format!("{} in {}", education.study_type, education.area),
             summary: None,
-            highlights: education.courses.clone(),
+            highlights: education.courses,
         }
     }
 }

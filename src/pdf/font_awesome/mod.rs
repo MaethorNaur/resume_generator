@@ -48,11 +48,11 @@ impl FontAwesome {
         font_size: i64,
         color: Color,
     ) -> Result<(), Box<dyn Error>> {
-        let icon = FONTS.get(name).ok_or(UnkownFontError::new(name))?;
+        let icon = FONTS.get(name).ok_or_else(|| UnkownFontError::new(name))?;
         let font = &self.regular;
         current_layer.set_fill_color(color);
-        current_layer.set_font(&font, font_size as f64);
-        current_layer.write_text(*icon, &font);
+        current_layer.set_font(font, font_size as f64);
+        current_layer.write_text(*icon, font);
         Ok(())
     }
 }

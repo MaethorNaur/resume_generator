@@ -56,9 +56,9 @@ pub struct Pdf {
 impl Pdf {
     pub fn new(resume: Resume) -> Result<Self, Box<dyn Error>> {
         let (doc, page1, layer1) = PdfDocument::new("Resume", DOC_WIDTH, DOC_HEIGHT, "Layer 1");
-        let font_regular = doc.add_external_font(Cursor::new(FONT_REGULAR.as_ref()))?;
-        let font_bold = doc.add_external_font(Cursor::new(FONT_BOLD.as_ref()))?;
-        let font_thin = doc.add_external_font(Cursor::new(FONT_THIN.as_ref()))?;
+        let font_regular = doc.add_external_font(Cursor::new(FONT_REGULAR))?;
+        let font_bold = doc.add_external_font(Cursor::new(FONT_BOLD))?;
+        let font_thin = doc.add_external_font(Cursor::new(FONT_THIN))?;
 
         let font_awesome = FontAwesome::new(font_regular.clone());
 
@@ -198,11 +198,7 @@ impl Pdf {
                 / 52;
             self.layer.set_font(&self.font_regular, 9.0);
             self.layer.write_text(
-                format!(
-                    "    {} ({}yo)",
-                    birthday.format("%d %b %Y").to_string(),
-                    age
-                ),
+                format!("    {} ({}yo)", birthday.format("%d %b %Y"), age),
                 &self.font_regular,
             );
         }
@@ -443,7 +439,7 @@ impl Pdf {
             self.write_bounded(institution, 30);
             self.layer.set_font(&self.font_regular, 9.0);
             if !location.is_empty() {
-                self.write_bounded(&location.trim(), 30);
+                self.write_bounded(location.trim(), 30);
             }
         };
 
@@ -465,7 +461,7 @@ impl Pdf {
             .set_text_cursor(offset + Mm(7.), (pos_y - Pt(20.)).into());
         self.layer.set_font(&self.font_regular, 9.0);
         if let Some(summary) = &event.summary {
-            self.write_bounded(&summary, 36);
+            self.write_bounded(summary, 36);
         }
 
         if !event.highlights.is_empty() {
@@ -479,7 +475,7 @@ impl Pdf {
     fn social_qr_code(&self) -> Result<(), Box<dyn Error>> {
         if let Some(url) = &self.resume.basics.website {
             debug!("Generating QRCode for: {:?}", url);
-            let qrcode = image::qrcode(&url, 220, image::to_rgb(self.primary_color.clone()))?;
+            let qrcode = image::qrcode(url, 220, image::to_rgb(self.primary_color.clone()))?;
             qrcode.add_to_layer(
                 self.layer.clone(),
                 ImageTransform {
